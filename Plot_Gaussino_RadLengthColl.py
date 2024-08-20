@@ -9,7 +9,7 @@ sifca_utils.plotting.set_sifca_style()
 # ROOT configuration
 save_plots = True
 FORMAT = ".pdf"
-omit_plots = False
+omit_plots = True
 ROOT.gROOT.SetBatch(omit_plots)
 ROOT.gStyle.SetOptStat(0)
 
@@ -33,8 +33,8 @@ def left_right(file):
             c = ROOT.TCanvas()
             h = tree.Get(name+type)
             h.Draw("colz")
-            h.GetXaxis().SetTitle("X/m")
-            h.GetYaxis().SetTitle("Y/m")
+            h.GetXaxis().SetTitle("X/mm")
+            h.GetYaxis().SetTitle("Y/mm")
             if not omit_plots:
                 input("Press enter to continue")
                 c.Draw()
@@ -58,8 +58,8 @@ def two_mat(file):
             c = ROOT.TCanvas()
             h = tree.Get(name+type)
             h.Draw("colz")
-            h.GetXaxis().SetTitle("X/m")
-            h.GetYaxis().SetTitle("Y/m")
+            h.GetXaxis().SetTitle("X/mm")
+            h.GetYaxis().SetTitle("Y/mm")
             if not omit_plots:
                 input("Press enter to continue")
                 c.Draw()
@@ -79,7 +79,7 @@ def main(inputfiles):
 
         if file.split('/')[-1] == "Results_Left_Right_Planes.root":
             left_right(file)
-        elif file.split('/')[-1] == "Results_Plane_2_Mat.root":
+        elif file.split('/')[-1] == "Results_Plane_2_Mat.root" or file.split('/')[-1] == "Results_Displaced_Plane.root":
             two_mat(file)
 
 
