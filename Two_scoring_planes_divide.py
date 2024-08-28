@@ -18,7 +18,7 @@ hit_map = "hit_map"
 @click.argument("inputfiles", nargs=-1)
 def main(inputfiles):
     """
-    This function plot the rootfile with the results of the SP0, P0 SP1
+    This function plot the rootfile with the results of the SP0, P0 SP1 when the uniform particlegun is used
     """
     for file in inputfiles:
         #Save plots
@@ -38,6 +38,7 @@ def main(inputfiles):
             name = "ScoringPlane_"+str(i)+"PVolHist_"
             # Plot and store the hit map
             c = ROOT.TCanvas()
+            c.SetRightMargin(0.2)  
             h_hit_map = tree.Get(name+hit_map)
             h_hit_map.Draw("colz")
             h_hit_map.GetXaxis().SetTitle("X/mm")
@@ -51,12 +52,13 @@ def main(inputfiles):
             # Loop over the histogram types
             for type in histogram_type:
                 c = ROOT.TCanvas()
+                c.SetRightMargin(0.2)  
                 h = tree.Get(name+type)
                 h.Draw("colz")
                 # Divide histogram by hit map
                 h.Divide(h_hit_map)
                 h.GetXaxis().SetTitle("X/mm")
-                h.GetYaxis().SetTitle("Y/mm")
+                h.GetYaxis().SetTitle("Y/mm")               
                 if not omit_plots:
                     input("Press enter to continue")
                     c.Draw()

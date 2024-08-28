@@ -12,13 +12,13 @@ FORMAT = ".pdf"
 omit_plots = True
 ROOT.gROOT.SetBatch(omit_plots)
 ROOT.gStyle.SetOptStat(0)
-histogram_type = ["cml_int", "cml_rad", "p2p_int", "p2p_rad"]
-hit_map = "hit_map"
+histogram_type = ["hit_map", "cml_int", "cml_rad", "p2p_int", "p2p_rad"]
+
 @click.command()
 @click.argument("inputfiles", nargs=-1)
 def main(inputfiles):
     """
-    This function plot the rootfile with the results of the SP0, P0 SP1, P1, SP2 when the uniform particlegun is used
+    This function plot the rootfile with the results of the SP0, P0 SP1 when the grid particlegun is used
     """
     for file in inputfiles:
         #Save plots
@@ -34,36 +34,24 @@ def main(inputfiles):
         tree_name = "RadLengthColl"
         tree = d.Get(tree_name)    
         # Loop over the two scoring planes
-        for i in range(3):
+        for i in range(2):
             name = "ScoringPlane_"+str(i)+"PVolHist_"
-            # Plot and store the hit map
-            c = ROOT.TCanvas()
-            c.SetRightMargin(0.2) 
-            h_hit_map = tree.Get(name+hit_map)
-            h_hit_map.Draw("colz")
-            h_hit_map.GetXaxis().SetTitle("X/mm")
-            h_hit_map.GetYaxis().SetTitle("Y/mm")
-            if not omit_plots:
-                input("Press enter to continue")
-                c.Draw()
-            if save_plots:
-                c.SaveAs(f"Pictures/{folder}/{name}{hit_map}{FORMAT}")
-
             # Loop over the histogram types
             for type in histogram_type:
                 c = ROOT.TCanvas()
-                c.SetRightMargin(0.2) 
+                c.SetRightMargin(0.2)  
                 h = tree.Get(name+type)
                 h.Draw("colz")
                 # Divide histogram by hit map
-                h.Divide(h_hit_map)
                 h.GetXaxis().SetTitle("X/mm")
                 h.GetYaxis().SetTitle("Y/mm")
+                # Write z axis in math mode
                 if not omit_plots:
                     input("Press enter to continue")
                     c.Draw()
                 if save_plots:
                     c.SaveAs(f"Pictures/{folder}/{name}{type}{FORMAT}")
+
 
 
 if __name__ == '__main__':
