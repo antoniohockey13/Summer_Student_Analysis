@@ -7,6 +7,7 @@ import os
 sifca_utils.plotting.set_sifca_style()
 
 # ROOT configuration
+projection = True
 save_plots = True
 FORMAT = ".pdf"
 omit_plots = True
@@ -17,15 +18,16 @@ plane_names = [
     "EndRich1", 
     "AfterTT", 
     "AfterMagnet", 
-    "AfterOTPlane1", 
-    "AfterOTPlane2", 
-    "AfterOTPlane3", 
+    # "AfterOTPlane1", 
+    # "AfterOTPlane2", 
+    # "AfterOTPlane3", 
     "AfterRich2", 
-    "AfterSpd", 
+    # "AfterSpd", 
     "AfterECAL", 
-    "AfterM2",
-    "AfterM2Filter",
-    "EoD"]
+    # "AfterM2",
+    # "AfterM2Filter",
+    # "EoD",
+    ]
 
 @click.command()
 @click.argument("inputfiles", nargs=-1)
@@ -55,13 +57,31 @@ def main(inputfiles):
                 c.SetRightMargin(0.2) 
                 h = tree.Get(name+type)
                 h.Draw("colz")
-                h.GetXaxis().SetTitle("Eta")
-                h.GetYaxis().SetTitle("Phi")
+                # h.GetXaxis().SetTitle("#eta")
+                # h.GetYaxis().SetTitle("#phi")
+                h.GetXaxis().SetTitle("X/mm")
+                h.GetYaxis().SetTitle("Y/mm")
                 if not omit_plots:
                     input("Press enter to continue")
                     c.Draw()
                 if save_plots:
                     c.SaveAs(f"Pictures/{folder}/{name}{type}{FORMAT}")
+                # Delete canvas
+                c.Close()
+
+                # Project over x-axis
+                if projection:
+                    c_proj = ROOT.TCanvas("c_proj")
+                    h_proj = tree.Get(name+type)
+                    h_proj.ProjectionX().Draw()
+                    h_proj.GetYaxis().SetTitle("Entries")
+                    if not omit_plots:
+                        input("Press enter to continue")
+                        c_proj.Draw()
+                    if save_plots:
+                        c_proj.SaveAs(f"Pictures/{folder}/{name}_projX_{type}{FORMAT}")
+                    # Delete canvas
+                    c_proj.Close()
 
 
 if __name__ == '__main__':
