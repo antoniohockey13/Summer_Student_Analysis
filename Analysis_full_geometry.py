@@ -72,13 +72,16 @@ def main(inputfiles):
             name = f"ScoringPlane_{i}PVolHist_"
             for type in histogram_type:
                 c = ROOT.TCanvas()
-                c.SetRightMargin(0.2) 
+                c.SetRightMargin(0.25) 
                 h = tree.Get(name+type)
                 h.Draw("colz")
                 # h.GetXaxis().SetTitle("#eta")
                 # h.GetYaxis().SetTitle("#phi")
                 h.GetXaxis().SetTitle("X/mm")
                 h.GetYaxis().SetTitle("Y/mm")
+                h.GetZaxis().SetTitle("X/X0 (%)")
+                # Move Z axis label to the right
+                h.GetZaxis().SetTitleOffset(1.5)
                 if not omit_plots:
                     input("Press enter to continue")
                     c.Draw()
@@ -94,10 +97,14 @@ def main(inputfiles):
                     h.GetZaxis().SetRangeUser(limit_z[i]["min"], limit_z[i]["max"])
                     h = tree.Get(name+type)
                     h.Draw("colz")
-                    # h.GetXaxis().SetTitle("#eta")
-                    # h.GetYaxis().SetTitle("#phi")
+                        # h.GetXaxis().SetTitle("#eta")
+                        # h.GetYaxis().SetTitle("#phi")
                     h.GetXaxis().SetTitle("X/mm")
                     h.GetYaxis().SetTitle("Y/mm")
+                    h.GetZaxis().SetTitle("X/X0 (%)")
+                    # Move Z axis label to the right
+                    h.GetZaxis().SetTitleOffset(1.5)
+
                     if not omit_plots:
                         input("Press enter to continue")
                         c.Draw()

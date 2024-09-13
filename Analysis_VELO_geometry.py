@@ -9,7 +9,7 @@ sifca_utils.plotting.set_sifca_style()
 # ROOT configuration
 plot_log = False
 limit_z = False
-projection = True
+projection = False
 omit_plots = True
 save_plots = True
 FORMAT = ".pdf"
@@ -52,10 +52,12 @@ def main(inputfiles):
                     h.GetZaxis().SetRangeUser(0, 60)
                 if plot_log:
                     c.SetLogz()
-                h.GetXaxis().SetTitle("#eta")
-                h.GetYaxis().SetTitle("#phi")
-                # h.GetXaxis().SetTitle("X/mm")
-                # h.GetYaxis().SetTitle("Y/mm")
+                # h.GetXaxis().SetTitle("#eta")
+                # h.GetYaxis().SetTitle("#phi")
+                h.GetXaxis().SetTitle("X/mm")
+                h.GetYaxis().SetTitle("Y/mm")
+                h.GetZaxis().SetTitle("X/X0 (%)")
+                h.GetZaxis().SetTitleOffset(1.2)
                 if not omit_plots:
                     input("Press enter to continue")
                     c.Draw()
@@ -65,53 +67,6 @@ def main(inputfiles):
                     if limit_z:
                         name = f"{name}zlimited"
                     c.SaveAs(f"Pictures/{folder}/{name}{type}{FORMAT}")
-                # Project over x-axis
-                if projection:
-                    projection(tree, name, folder)
-
-
-def projection(tree, name, folder):
-    """
-    Project the histogram over the x-axis
-
-    Parameters
-    ----------
-    tree: ROOT.TTree
-    name: str
-    folder: str
-    """
-    # Remove hit_map from the histogram types
-    histogram_type = ["cml_int", "cml_rad", "p2p_int", "p2p_rad"]
-    # Compute hit map projection
-    c_proj_hit_map = ROOT.TCanvas("c_proj_hit_map")
-    h_proj_hit_map = tree.Get(name+"hit_map")
-    h_proj_hit_map.ProjectionX().Draw()
-    if not omit_plots:
-        input("Press enter to continue")
-        c_proj_hit_map.Draw()
-    if save_plots:
-        c_proj_hit_map.SaveAs(f"Pictures/{folder}/{name}_projX_hit_map{FORMAT}")
-    # Delete canvas
-    c_proj_hit_map.Close()
-
-    # Loop over the histogram types
-    for type in histogram_type:
-        c_proj = ROOT.TCanvas("c_proj")
-        h = tree.Get(name+type)
-        # Project over x-axis
-        h_proj = h.ProjectionX()
-        # Divide histogram by hit map projection
-        h_proj_div = h_proj.Divide(h_proj_hit_map.ProjectionX())
-        h_proj_div.Draw()
-        if not omit_plots:
-            input("Press enter to continue")
-            c_proj.Draw()
-        if save_plots:
-            c_proj.SaveAs(f"Pictures/{folder}/{name}_projX_{type}{FORMAT}")
-
-        # Delete canvas
-        c_proj.Close()
-
 
 if __name__ == '__main__':
     main()

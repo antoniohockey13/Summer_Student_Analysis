@@ -58,7 +58,10 @@ def main(inputfiles):
                 # Divide histogram by hit map
                 h.Divide(h_hit_map)
                 h.GetXaxis().SetTitle("X/mm")
-                h.GetYaxis().SetTitle("Y/mm")               
+                h.GetYaxis().SetTitle("Y/mm")    
+                h.GetZaxis().SetTitle("X/X0 (%)")
+                # Move Z axis label to the right
+                h.GetZaxis().SetTitleOffset(1.2)          
                 if not omit_plots:
                     input("Press enter to continue")
                     c.Draw()

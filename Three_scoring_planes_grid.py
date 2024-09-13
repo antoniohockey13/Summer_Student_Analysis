@@ -41,8 +41,11 @@ def main(inputfiles):
                 c.SetRightMargin(0.2) 
                 h = tree.Get(name+type)
                 h.Draw("colz")
-                h.GetXaxis().SetTitle("#eta")
-                h.GetYaxis().SetTitle("#phi")
+                # h.GetXaxis().SetTitle("#eta")
+                # h.GetYaxis().SetTitle("#phi")
+                h.GetXaxis().SetTitle("X/mm")
+                h.GetYaxis().SetTitle("Y/mm")
+                h.GetZaxis().SetTitle("X/X0 (%)")
                 if not omit_plots:
                     input("Press enter to continue")
                     c.Draw()

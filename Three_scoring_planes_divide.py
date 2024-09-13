@@ -43,6 +43,7 @@ def main(inputfiles):
             h_hit_map.Draw("colz")
             h_hit_map.GetXaxis().SetTitle("X/mm")
             h_hit_map.GetYaxis().SetTitle("Y/mm")
+            h.GetZaxis().SetTitle("X/X0 (%)")
             if not omit_plots:
                 input("Press enter to continue")
                 c.Draw()
@@ -59,6 +60,7 @@ def main(inputfiles):
                 h.Divide(h_hit_map)
                 h.GetXaxis().SetTitle("X/mm")
                 h.GetYaxis().SetTitle("Y/mm")
+                h.GetZaxis().SetTitle("X/X0 (%)")
                 if not omit_plots:
                     input("Press enter to continue")
                     c.Draw()
